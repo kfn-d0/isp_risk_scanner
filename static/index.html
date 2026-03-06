@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ISP Risk Scanner | Passive ASN Exposure</title>
+    <link rel="stylesheet" href="static/style.css?v=5">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <div id="env-badge" class="hidden"></div>
+
+    <div class="theme-toggle" onclick="toggleTheme()" title="Trocar Tema">
+        <span id="theme-icon">🌙</span>
+        <span id="theme-text" style="font-size: 0.9rem;">Modo Escuro</span>
+    </div>
+
+    <div class="container">
+        <header>
+            <div class="logo">
+                <h1>ISP Threat Scanner <span>Edge</span></h1>
+            </div>
+            <p>Analise de Exposição Pública de AS - Coleta Passiva</p>
+        </header>
+
+        <section class="scan-panel glass">
+            <h2>Nova Análise</h2>
+            <div class="input-group">
+                <input type="text" id="asn-input" placeholder="Ex: AS15169"
+                    title="Insira o número do AS (Sistema Autônomo)">
+                <button id="scan-btn" onclick="startScan()">Analisar Exposições</button>
+            </div>
+            <div id="loader" class="hidden">
+                <span class="spinner"></span> <span id="ws-status">Conectando...</span>
+            </div>
+            <div id="error-msg" class="hidden error"></div>
+        </section>
+
+        <section id="results-dashboard" class="hidden">
+
+            <div style="display: flex; justify-content: flex-end; margin-bottom: 1.5rem; animation: fadeIn 0.6s ease;">
+                <button onclick="generateReport()"
+                    style="background: linear-gradient(135deg, #00d2ff, #0056ff); padding: 0.8rem 1.5rem; font-size: 0.9rem; box-shadow: 0 4px 15px rgba(0, 210, 255, 0.3);">📄
+                    Gerar Relatório Corporativo</button>
+            </div>
+
+            <div class="metrics-grid">
+                <div class="metric-card glass glow">
+                    <h3>Score de Risco Global</h3>
+                    <div id="score-val" class="huge-text score">0</div>
+                    <p class="subtitle">Baseado nos vetores de porta mapeados</p>
+                </div>
+                <div class="metric-card glass">
+                    <h3>Total de Exposições</h3>
+                    <div id="exposures-val" class="huge-text">0</div>
+                    <p class="subtitle">Serviços escutando ativamente</p>
+                </div>
+                <div class="metric-card glass">
+                    <h3>IPs Únicos Afetados</h3>
+                    <div id="ips-val" class="huge-text">0</div>
+                    <p class="subtitle">Total de hosts descobertos</p>
+                </div>
+                <div class="metric-card glass">
+                    <h3>Tempo de Análise</h3>
+                    <div id="time-val" class="huge-text">0s</div>
+                    <p class="subtitle">Rastreamento passivo pass-through</p>
+                </div>
+            </div>
+
+            <div class="charts-wrap">
+                <div class="chart-container glass">
+                    <h3>Distribuição de Portas Expostas</h3>
+                    <div style="position: relative; height:250px; width:100%">
+                        <canvas id="portsChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="tables-container glass">
+                    <h3>10 Prefixos Mais Expostos (Por Risco)</h3>
+                    <table id="prefixes-table">
+                        <thead>
+                            <tr>
+                                <th>Prefixo</th>
+                                <th>Score Combinado</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="details-section glass">
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="switchTab(event, 'raw')">Detalhamento dos Dados
+                        Passivos</button>
+                    <button class="tab-btn" onclick="switchTab(event, 'services')">Top Serviços (Ranking)</button>
+                </div>
+
+                <div id="tab-raw" class="tab-content active">
+                    <table id="raw-table">
+                        <thead>
+                            <tr>
+                                <th>IP</th>
+                                <th>Bloco (Prefixo)</th>
+                                <th>Porta</th>
+                                <th>Serviço Identificado</th>
+                                <th>Nível de Risco</th>
+                                <th>Detalhes (OSINT)</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+
+                <div id="tab-services" class="tab-content hidden">
+                    <table id="services-table">
+                        <thead>
+                            <tr>
+                                <th>Serviço / Produto</th>
+                                <th>Ocorrências</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+        </section>
+
+        <div id="mock-warning" class="hidden warning-banner glass">
+            <span> Utilizando dados simulados em prefixos reais devido à ausência de chave de API do Shodan ativa no
+                backend. (Demonstração de Portfólio)</span>
+        </div>
+
+    </div>
+
+    <script src="static/script.js?v=5"></script>
+</body>
+
+</html>

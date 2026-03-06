@@ -1,0 +1,11 @@
+services:
+  scanner:
+    build: .
+    container_name: isp-risk-scanner
+    ports:
+      - "8000:8000"
+    environment:
+      - SHODAN_API_KEY=${SHODAN_API_KEY:-}
+    volumes:
+      - ./data:/app/data
+    restart: always
