@@ -1,6 +1,6 @@
 # ISP Threat Scanner Edge 
 
-Uma projeto para análise técnica da superfície de exposição pública de Sistemas Autônomos (ASN). Focada em **Inteligência de Fontes Abertas (OSINT)** e coleta passiva de dados para segurança cibernética.
+Uma projeto para análise técnica da superfície de exposição pública de Sistemas Autônomos (ASN). Focada em **Inteligência de Fontes Abertas (OSINT)** e coleta passiva de dados.
 
 ---
 
